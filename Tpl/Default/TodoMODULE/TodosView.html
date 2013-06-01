@@ -1,0 +1,9 @@
+<script type="text/template" id="TodoMODULE_TodosView">
+	<div class="view">
+		<input class="toggle" type="checkbox" <%= completed ? 'checked' : '' %>>
+		<label><%= title %></label>
+		<button class="destroy"></button>
+	</div>
+	<input class="edit" value="<%= title %>">
+</script>
+<script type="text/javascript">var TodoMODULE_TodosView = {:json_encode($TodoMODULE_TodosView)};</script>

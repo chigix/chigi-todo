@@ -1,0 +1,18 @@
+<script type="text/template" id="TodoMODULE_TodoStatsView">
+	<span id="todo-count"><strong><%= remaining %></strong> <%= remaining == 1 ? 'item' : 'items' %> left</span>
+	<ul id="filters">
+		<li>
+			<a class="selected" href="#/">All</a>
+		</li>
+		<li>
+			<a href="#/active">Active</a>
+		</li>
+		<li>
+			<a href="#/completed">Completed</a>
+		</li>
+	</ul>
+	<% if ( completed ) { %>
+	<button id="clear-completed">Clear completed (<%= completed %>)</button>
+	<% } %>
+</script>
+<script type="text/javascript">var TodoMODULE_TodoStatsView = {:json_encode($TodoMODULE_TodoStatsView)};</script>
