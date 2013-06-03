@@ -1,4 +1,4 @@
-//@require:backbone,jquery,underscore,chigiThis('TodoCollection/todos'),chigiThis('Todo/TodosView'),chigiThis('Todo/TodoCommon')
+//@require:backbone,jquery,underscore,chigiThis('TodoCollection/todos'),chigiThis('TodoView/TodosView'),chigiThis('TodoView/TodoCommon')
 'use strict';
 
 var AppView = Backbone.View.extend({
@@ -8,7 +8,7 @@ var AppView = Backbone.View.extend({
 	el: '#chigiThis',
 
 	// Compile our stats template
-	template: _.template($('#chigiThis("Todo/TodoStatsView")').html()),
+	template: _.template($('#chigiThis("TodoView/TodoStatsView")').html()),
 
 	// Delegated events for creating new items, and clearing completed ones.
 	events: {
@@ -45,14 +45,14 @@ var AppView = Backbone.View.extend({
 			this.$main.show();
 			this.$footer.show();
 
-			this.$footer.html(_.template($('#chigiThis("Todo/TodoStatsView")').html(), {
+			this.$footer.html(_.template($('#chigiThis("TodoView/TodoStatsView")').html(), {
 				completed: completed,
 				remaining: remaining
 			}));
 
 			this.$('#filters li a')
 				.removeClass('selected')
-				.filter('[href="#/' + (chigiThis('Todo/TodoCommon').TodoFilter || '') + '"]')
+				.filter('[href="#/' + (chigiThis('TodoView/TodoCommon').TodoFilter || '') + '"]')
 				.addClass('selected');
 		} else {
 			this.$main.hide();
@@ -65,7 +65,7 @@ var AppView = Backbone.View.extend({
 	// Add a single todo item to the list by creating a view for it, and
 	// appending its element to the `<ul>`.
 	addOne: function(todo) {
-		var view = new chigiThis('Todo/TodosView')({
+		var view = new chigiThis('TodoView/TodosView')({
 			model: todo
 		});
 		$('#todo-list').append(view.render().el);
@@ -97,7 +97,7 @@ var AppView = Backbone.View.extend({
 	// If you hit return in the main input field, create new **Todo** model,
 	// persisting it to *localStorage*.
 	createOnEnter: function(e) {
-		if (e.which !== chigiThis('Todo/TodoCommon').ENTER_KEY || !this.$input.val().trim()) {
+		if (e.which !== chigiThis('TodoView/TodoCommon').ENTER_KEY || !this.$input.val().trim()) {
 			return;
 		}
 

@@ -1,11 +1,11 @@
-//@require:backbone,jquery,underscore,chigiThis('Todo/TodoCommon')
+//@require:backbone,jquery,underscore,chigiThis('TodoView/TodoCommon')
 'use strict';
 
 var TodoView = Backbone.View.extend({
 
 	tagName: 'li',
 
-	template: _.template($('#chigiThis("Todo/TodosView")').html()),
+	template: _.template($('#chigiThis("TodoView/TodosView")').html()),
 
 	// The DOM events specific to an item.
 	events: {
@@ -27,7 +27,7 @@ var TodoView = Backbone.View.extend({
 
 	// Re-render the titles of the todo item.
 	render: function() {
-		this.$el.html(_.template($('#chigiThis("Todo/TodosView")').html(), this.model.toJSON()));
+		this.$el.html(_.template($('#chigiThis("TodoView/TodosView")').html(), this.model.toJSON()));
 		this.$el.toggleClass('completed', this.model.get('completed'));
 
 		this.toggleVisible();
@@ -42,8 +42,8 @@ var TodoView = Backbone.View.extend({
 	isHidden: function() {
 		var isCompleted = this.model.get('completed');
 		return ( // hidden cases only
-		(!isCompleted && chigiThis('Todo/TodoCommon').TodoFilter === 'completed') ||
-			(isCompleted && chigiThis('Todo/TodoCommon').TodoFilter === 'active'));
+		(!isCompleted && chigiThis('TodoView/TodoCommon').TodoFilter === 'completed') ||
+			(isCompleted && chigiThis('TodoView/TodoCommon').TodoFilter === 'active'));
 	},
 
 	// Toggle the `"completed"` state of the model.
@@ -74,7 +74,7 @@ var TodoView = Backbone.View.extend({
 
 	// If you hit `enter`, we're through editing the item.
 	updateOnEnter: function(e) {
-		if (e.keyCode === chigiThis('Todo/TodoCommon').ENTER_KEY) {
+		if (e.keyCode === chigiThis('TodoView/TodoCommon').ENTER_KEY) {
 			this.close();
 		}
 	},
