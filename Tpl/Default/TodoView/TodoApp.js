@@ -1,4 +1,4 @@
-//@require:backbone,jquery,underscore,chigiThis('TodoCollection/todos'),chigiThis('TodoView/TodosView'),chigiThis('TodoView/TodoCommon')
+//@require:backbone,jquery,underscore,chigiThis('TodoCollection/objTodos'),chigiThis('TodoView/TodoView'),chigiThis('TodoView/objCommon')
 'use strict';
 
 var AppView = Backbone.View.extend({
@@ -26,22 +26,27 @@ var AppView = Backbone.View.extend({
 		this.$footer = this.$('#footer');
 		this.$main = this.$('#main');
 
-		this.listenTo(chigiThis('TodoCollection/todos'), 'add', this.addOne);
-		this.listenTo(chigiThis('TodoCollection/todos'), 'reset', this.addAll);
-		this.listenTo(chigiThis('TodoCollection/todos'), 'change:completed', this.filterOne);
-		this.listenTo(chigiThis('TodoCollection/todos'), 'filter', this.filterAll);
-		this.listenTo(chigiThis('TodoCollection/todos'), 'all', this.render);
+		this.listenTo(chigiThis('TodoCollection/objTodos'), 'add', this.addOne);
+		this.listenTo(chigiThis('TodoCollection/objTodos'), 'reset', this.addAll);
+		this.listenTo(chigiThis('TodoCollection/objTodos'), 'change:completed', this.filterOne);
+		this.listenTo(chigiThis('TodoCollection/objTodos'), 'filter', this.filterAll);
+		this.listenTo(chigiThis('TodoCollection/objTodos'), 'all', this.render);
 
-		chigiThis('TodoCollection/todos').fetch();
+		// 当前页面第一次获取初始数据
+		chigiThis('TodoCollection/objTodos').fetch({
+			error: function() {
+				alert("ERROR");
+			}
+		});
 	},
 
 	// Re-rendering the App just means refreshing the statistics -- the rest
 	// of the app doesn't change.
 	render: function() {
-		var completed = chigiThis('TodoCollection/todos').completed().length;
-		var remaining = chigiThis('TodoCollection/todos').remaining().length;
+		var completed = chigiThis('TodoCollection/objTodos').completed().length;
+		var remaining = chigiThis('TodoCollection/objTodos').remaining().length;
 
-		if (chigiThis('TodoCollection/todos').length) {
+		if (chigiThis('TodoCollection/objTodos').length) {
 			this.$main.show();
 			this.$footer.show();
 
@@ -52,7 +57,7 @@ var AppView = Backbone.View.extend({
 
 			this.$('#filters li a')
 				.removeClass('selected')
-				.filter('[href="#/' + (chigiThis('TodoView/TodoCommon').TodoFilter || '') + '"]')
+				.filter('[href="#/' + (chigiThis('TodoView/objCommon').TodoFilter || '') + '"]')
 				.addClass('selected');
 		} else {
 			this.$main.hide();
@@ -65,7 +70,7 @@ var AppView = Backbone.View.extend({
 	// Add a single todo item to the list by creating a view for it, and
 	// appending its element to the `<ul>`.
 	addOne: function(todo) {
-		var view = new chigiThis('TodoView/TodosView')({
+		var view = new chigiThis('TodoView/TodoView')({
 			model: todo
 		});
 		$('#todo-list').append(view.render().el);
@@ -74,22 +79,23 @@ var AppView = Backbone.View.extend({
 	// Add all items in the **Todos** collection at once.
 	addAll: function() {
 		this.$('#todo-list').html('');
-		chigiThis('TodoCollection/todos').each(this.addOne, this);
+		chigiThis('TodoCollection/objTodos').each(this.addOne, this);
 	},
 
 	filterOne: function(todo) {
+		// 该事件绑定于 TodoView中
 		todo.trigger('visible');
 	},
 
 	filterAll: function() {
-		chigiThis('TodoCollection/todos').each(this.filterOne, this);
+		chigiThis('TodoCollection/objTodos').each(this.filterOne, this);
 	},
 
 	// Generate the attributes for a new Todo item.
 	newAttributes: function() {
 		return {
 			title: this.$input.val().trim(),
-			order: chigiThis('TodoCollection/todos').nextOrder(),
+			order: chigiThis('TodoCollection/objTodos').nextOrder(),
 			completed: false
 		};
 	},
@@ -97,24 +103,24 @@ var AppView = Backbone.View.extend({
 	// If you hit return in the main input field, create new **Todo** model,
 	// persisting it to *localStorage*.
 	createOnEnter: function(e) {
-		if (e.which !== chigiThis('TodoView/TodoCommon').ENTER_KEY || !this.$input.val().trim()) {
+		if (e.which !== chigiThis('TodoView/objCommon').ENTER_KEY || !this.$input.val().trim()) {
 			return;
 		}
 
-		chigiThis('TodoCollection/todos').create(this.newAttributes());
+		chigiThis('TodoCollection/objTodos').create(this.newAttributes());
 		this.$input.val('');
 	},
 
 	// Clear all completed todo items, destroying their models.
 	clearCompleted: function() {
-		_.invoke(chigiThis('TodoCollection/todos').completed(), 'destroy');
+		_.invoke(chigiThis('TodoCollection/objTodos').completed(), 'destroy');
 		return false;
 	},
 
 	toggleAllComplete: function() {
 		var completed = this.allCheckbox.checked;
 
-		chigiThis('TodoCollection/todos').each(function(todo) {
+		chigiThis('TodoCollection/objTodos').each(function(todo) {
 			todo.save({
 				'completed': completed
 			});

@@ -1,17 +1,20 @@
-//@require:underscore,backbone,chigiThis('TodoModel/todo'),localstorage
+//@require:underscore,backbone,chigiThis('TodoModel/ClsTodo'),localstorage
 'use strict';
 
 var TodosCollection = Backbone.Collection.extend({
 	// Reference to this collection's model.
-	model: chigiThis('TodoModel/todo'),
+	model: chigiThis('TodoModel/ClsTodo'),
+
+	// url: '{:redirect_link("Ajax/todo")}',
+	//url: '{:rest_link("Ajax/todo")}',
 
 	// Save all of the todo items under the `"todos"` namespace.
 	localStorage: new Localstorage('todos-backbone'),
 
 	// Filter down the list of all todo items that are finished.
 	completed: function() {
-		return this.filter(function(chigiThis('TodoModel/todo')) {
-			return chigiThis('TodoModel/todo').get('completed');
+		return this.filter(function(chigiThis('TodoModel/ClsTodo')) {
+			return chigiThis('TodoModel/ClsTodo').get('completed');
 		});
 	},
 
@@ -30,8 +33,8 @@ var TodosCollection = Backbone.Collection.extend({
 	},
 
 	// Todos are sorted by their original insertion order.
-	comparator: function(chigiThis('TodoModel/todo')) {
-		return chigiThis('TodoModel/todo').get('order');
+	comparator: function(ClsTodo) {
+		return ClsTodo.get('order');
 	}
 });
 

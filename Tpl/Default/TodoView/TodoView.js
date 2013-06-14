@@ -1,13 +1,13 @@
-//@require:backbone,jquery,underscore,chigiThis('TodoView/TodoCommon')
+//@require:backbone,jquery,underscore,chigiThis('TodoView/objCommon')
 'use strict';
-
+// 一个TodoView 与一个 TodoModel一一对应
 var TodoView = Backbone.View.extend({
 
 	tagName: 'li',
 
-	template: _.template($('#chigiThis("TodoView/TodosView")').html()),
+	template: _.template($('#chigiThis("TodoView/TodoView")').html()),
 
-	// The DOM events specific to an item.
+	// 为每个Todo条目绑定通用事件
 	events: {
 		'click .toggle': 'toggleCompleted',
 		'dblclick label': 'edit',
@@ -27,7 +27,7 @@ var TodoView = Backbone.View.extend({
 
 	// Re-render the titles of the todo item.
 	render: function() {
-		this.$el.html(_.template($('#chigiThis("TodoView/TodosView")').html(), this.model.toJSON()));
+		this.$el.html(_.template($('#chigiThis("TodoView/TodoView")').html(), this.model.toJSON()));
 		this.$el.toggleClass('completed', this.model.get('completed'));
 
 		this.toggleVisible();
@@ -42,8 +42,8 @@ var TodoView = Backbone.View.extend({
 	isHidden: function() {
 		var isCompleted = this.model.get('completed');
 		return ( // hidden cases only
-		(!isCompleted && chigiThis('TodoView/TodoCommon').TodoFilter === 'completed') ||
-			(isCompleted && chigiThis('TodoView/TodoCommon').TodoFilter === 'active'));
+		(!isCompleted && chigiThis('TodoView/objCommon').TodoFilter === 'completed') ||
+			(isCompleted && chigiThis('TodoView/objCommon').TodoFilter === 'active'));
 	},
 
 	// Toggle the `"completed"` state of the model.
@@ -62,9 +62,10 @@ var TodoView = Backbone.View.extend({
 		var value = this.$input.val().trim();
 
 		if (value) {
-			this.model.save({
+			this.model.set({
 				title: value
 			});
+			this.model.save();
 		} else {
 			this.clear();
 		}
@@ -74,7 +75,7 @@ var TodoView = Backbone.View.extend({
 
 	// If you hit `enter`, we're through editing the item.
 	updateOnEnter: function(e) {
-		if (e.keyCode === chigiThis('TodoView/TodoCommon').ENTER_KEY) {
+		if (e.keyCode === chigiThis('TodoView/objCommon').ENTER_KEY) {
 			this.close();
 		}
 	},
